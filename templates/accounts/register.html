@@ -8,15 +8,20 @@
         
         <form method="POST" autocomplete="off">
             {% csrf_token %}
-            
+            {% if error_message %}
+                <div class="alert alert-danger">
+                    {{ error_message }}
+                </div>
+            {% endif %}
+
             <div class="mb-3">
                 <label class="form-label text-white">Username</label>
-                <input type="text" name="username" class="form-control" placeholder="Choose a username" autocomplete="new-password" required>
+                <input type="text" name="username" value="{{ username }}" class="form-control" placeholder="Choose a username" autocomplete="new-password" required>
             </div>
             
             <div class="mb-3">
                 <label class="form-label text-white">Email</label>
-                <input type="email" name="email" class="form-control" placeholder="Enter your email" autocomplete="new-password" required>
+                <input type="email" name="email" value="{{ email }}" class="form-control" placeholder="Enter your email" autocomplete="new-password" required>
             </div>
             
             <div class="mb-3">
