@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="mb-4">
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Dashboard</a>
+</div>
+
+<h1 class="mb-4">Add Skill</h1>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <input type="text" name="name" class="form-control" placeholder="Skill name" required>
+    </div>
+
+    <div class="mb-3">
+        <input type="text" name="category" class="form-control" placeholder="Category (e.g. Programming, Communication)" required>
+    </div>
+
+    <div class="mb-3">
+        <select name="level" class="form-control" required>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            <option value="Expert">Expert</option>
+        </select>
+    </div>
+
+    <button class="btn btn-info">Save Skill</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="mb-4">
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Dashboard</a>
+</div>
+
+<h1 class="mb-4">Edit Resume</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label text-white">Resume Title</label>
+        <input type="text" name="title" class="form-control" value="{{ resume.title }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label text-white">Summary / Notes</label>
+        <textarea name="summary" class="form-control" rows="8" required>{{ resume.summary }}</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label text-white">Resume File</label>
+        {% if resume.resume_file %}
+            <p class="text-secondary">Current file: <a href="{{ resume.resume_file.url }}" target="_blank" class="text-info">{{ resume.resume_file.name|slice:'9:' }}</a></p>
+        {% endif %}
+        <input type="file" name="resume_file" class="form-control" accept=".pdf,.doc,.docx">
+        <small class="text-muted">Upload a new file to replace the current resume.</small>
+    </div>
+
+    <button class="btn btn-info">Update Resume</button>
+</form>
+
+{% endblock %}

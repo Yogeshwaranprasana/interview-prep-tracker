@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="mb-4">
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Dashboard</a>
+</div>
+
+<h1 class="mb-4">Add Resume</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label text-white">Resume Title</label>
+        <input type="text" name="title" class="form-control" placeholder="Enter resume title" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label text-white">Summary / Notes</label>
+        <textarea name="summary" class="form-control" rows="8" placeholder="Write your resume details or summary." required></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label text-white">Upload Resume</label>
+        <input type="file" name="resume_file" class="form-control" accept=".pdf,.doc,.docx">
+    </div>
+
+    <button class="btn btn-info">Save Resume</button>
+</form>
+
+{% endblock %}

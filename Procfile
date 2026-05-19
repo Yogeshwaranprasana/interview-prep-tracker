@@ -1,0 +1,1 @@
+web: gunicorn mytracker.wsgi

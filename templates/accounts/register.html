@@ -1,0 +1,42 @@
+{% extends 'auth_base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card bg-dark text-white p-5 shadow rounded" style="width: 100%; max-width: 400px;">
+        <h2 class="text-center mb-4 text-info">Create Account</h2>
+        
+        <form method="POST" autocomplete="off">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label class="form-label text-white">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Choose a username" autocomplete="new-password" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label text-white">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="Enter your email" autocomplete="new-password" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label text-white">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Enter a strong password" autocomplete="new-password" required>
+            </div>
+            
+            <button type="submit" class="btn btn-success w-100 py-2 mb-3">Register</button>
+        </form>
+        
+        <hr class="text-muted">
+        
+        <p class="text-center text-secondary mb-0">
+            Already have an account? 
+            <a href="{% url 'login' %}" class="text-info" style="text-decoration: none; font-weight: bold;">
+                Login here
+            </a>
+        </p>
+    </div>
+</div>
+
+{% endblock %}
+

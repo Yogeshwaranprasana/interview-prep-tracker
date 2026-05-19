@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1>Dashboard Overview</h1>
+        <p class="text-muted">Track your applications, filter by status, and manage updates quickly.</p>
+    </div>
+    <a href="{% url 'add_application' %}" class="btn btn-info btn-lg">
+        Add Application
+    </a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <a href="{% url 'skill_list' %}" class="btn btn-outline-light w-100 py-3">
+            My Skills
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="{% url 'note_list' %}" class="btn btn-outline-light w-100 py-3">
+            My Notes
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="{% url 'resume_list' %}" class="btn btn-outline-light w-100 py-3">
+            My Resumes
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-info w-100 py-3">
+            Refresh Dashboard
+        </a>
+    </div>
+</div>
+
+<form method="GET" class="mb-4">
+    <div class="row gy-2 align-items-end">
+        <div class="col-md-5">
+            <label class="form-label text-white">Search</label>
+            <input
+                type="text"
+                name="search"
+                value="{{ search_query }}"
+                class="form-control"
+                placeholder="Search company or role..."
+            >
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-white">Status</label>
+            <select name="status" class="form-control">
+                <option value="" {% if not status_filter %}selected{% endif %}>All statuses</option>
+                <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="Selected" {% if status_filter == 'Selected' %}selected{% endif %}>Selected</option>
+                <option value="Rejected" {% if status_filter == 'Rejected' %}selected{% endif %}>Rejected</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <button class="btn btn-info w-100">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="row g-4 mb-5">
+
+    <div class="col-md-3">
+
+        <div class="card bg-dark text-white p-4 shadow rounded border border-info">
+
+            <h5>Total Applications</h5>
+
+            <h1>{{ total_applications }}</h1>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+    <div class="card bg-success text-white p-4 shadow rounded">
+
+        <h5>Selected</h5>
+
+        <h1>{{ selected_count }}</h1>
+
+    </div>
+
+</div>
+
+<div class="col-md-3">
+
+    <div class="card bg-warning text-dark p-4 shadow rounded">
+
+        <h5>Pending</h5>
+
+        <h1>{{ pending_count }}</h1>
+
+    </div>
+
+</div>
+
+<div class="col-md-3">
+
+    <div class="card bg-danger text-white p-4 shadow rounded">
+
+        <h5>Rejected</h5>
+
+        <h1>{{ rejected_count }}</h1>
+
+    </div>
+
+</div>
+
+</div>
+
+<div class="card bg-dark text-white p-4 shadow rounded">
+
+    <h3 class="mb-4">
+        Recent Activity
+    </h3>
+
+    {% for app in recent_applications %}
+
+        <div class="border-bottom pb-3 mb-3">
+
+            <h5>
+                {{ app.company_name }}
+            </h5>
+
+            <p>
+                {{ app.job_role }}
+            </p>
+
+            <small>
+
+                Status:
+                {{ app.status }}
+
+            </small>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+<div class="card bg-dark text-white p-4 shadow rounded">
+
+    <h3 class="mb-4">
+        Recent Applications
+    </h3>
+
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if applications.exists %}
+                {% for app in applications %}
+                    <tr>
+                        <td>{{ app.company_name }}</td>
+                        <td>{{ app.job_role }}</td>
+                        <td>
+                            {% if app.status == 'Pending' %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% elif app.status == 'Selected' %}
+                                <span class="badge bg-success">Selected</span>
+                            {% elif app.status == 'Rejected' %}
+                                <span class="badge bg-danger">Rejected</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ app.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ app.applied_date }}</td>
+                        <td>
+                            <a href="{% url 'edit_application' app.id %}" class="btn btn-warning btn-sm me-1">Edit</a>
+                            <a href="{% url 'delete_application' app.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        No applications found. Add one using the button above.
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}
