@@ -79,25 +79,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mytracker.wsgi.application'
 
-DATABASES = {
-    'default': dj_database_url.parse(
-        os.environ.get("DATABASE_URL")
-    )
-}
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if DATABASE_URL:
+    try:
+        DATABASES = {
+            'default': dj_database_url.parse(DATABASE_URL)
+        }
+    except Exception as exc:
+        raise RuntimeError(
+            f"Invalid DATABASE_URL environment variable: {DATABASE_URL!r}"
+        ) from exc
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'prep_tracker_db',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Yogesh@333',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 
 # Password validation
@@ -144,3 +145,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Set to None to disable this behaviour. Example: 8001
 # Set to 8000 so unauthenticated requests to http://127.0.0.1:8000/ go to login.
 LOGIN_PORT = 8000
+
+# Ensure Django uses the correct login and dashboard redirect paths.
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'

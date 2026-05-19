@@ -26,10 +26,17 @@ def register(request):
 
 def login_page(request):
 
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
+    error_message = None
+    username = ''
+    next_url = request.GET.get('next') or request.POST.get('next')
+
     if request.method == 'POST':
 
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
 
         user = authenticate(
             request,
@@ -40,10 +47,15 @@ def login_page(request):
         if user is not None:
 
             login(request, user)
+            return redirect(next_url or 'dashboard')
 
-            return redirect('dashboard')
+        error_message = 'Invalid username or password. Please try again.'
 
-    return render(request, 'accounts/login.html')
+    return render(request, 'accounts/login.html', {
+        'error_message': error_message,
+        'username': username,
+        'next_url': next_url,
+    })
 
 def logout_page(request):
 
