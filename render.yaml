@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: interview-tracker
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn mytracker.wsgi
+    releaseCommand: python manage.py migrate
